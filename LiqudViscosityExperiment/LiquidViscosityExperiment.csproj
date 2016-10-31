@@ -86,11 +86,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Resources\cone.obj" />
-    <None Include="Resources\cube.obj" />
-    <None Include="Resources\cylinder.obj" />
-    <None Include="Resources\monkey.obj" />
-    <None Include="Resources\sphere.obj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

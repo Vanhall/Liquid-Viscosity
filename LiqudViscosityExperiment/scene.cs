@@ -32,7 +32,9 @@ namespace LiquidViscosity
             initLights();
           
             camera = new camera(OGLVP);
-            monkey = new model("sphere.obj");
+            var filename = "sphere.obj";
+            System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream("LiquidViscosity." + filename);
+            monkey = new model(filename);
 
             Gl.glEnable(Gl.GL_DEPTH_TEST);
             Gl.glBlendFunc(Gl.GL_SRC_ALPHA, Gl.GL_ONE_MINUS_SRC_ALPHA);
