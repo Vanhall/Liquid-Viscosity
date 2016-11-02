@@ -288,22 +288,39 @@ namespace LiquidViscosity
 
         private void tubeSelector_CheckedChanged(object sender, EventArgs e)
         {
-            if (tubeSelector.Checked) modelSelector = scene.tube;
+            if (tubeSelector.Checked)
+            {
+                modelSelector = scene.tube;
+                setSliders(tempMatComp);
+            }
+
         }
 
         private void tubeiSelector_CheckedChanged(object sender, EventArgs e)
         {
-            if (liquidSelector.Checked) modelSelector = scene.liquid;
+            if (liquidSelector.Checked)
+            {
+                modelSelector = scene.liquid;
+                setSliders(tempMatComp);
+            }
         }
 
         private void bottomSelector_CheckedChanged(object sender, EventArgs e)
         {
-            if (bottomSelector.Checked) modelSelector = scene.bottom;
+            if (bottomSelector.Checked)
+            {
+                modelSelector = scene.bottom;
+                setSliders(tempMatComp);
+            }
         }
 
         private void ballSelector_CheckedChanged(object sender, EventArgs e)
         {
-            if (ballSelector.Checked) modelSelector = scene.ball;
+            if (ballSelector.Checked)
+            {
+                modelSelector = scene.ball;
+                setSliders(tempMatComp);
+            }
         }
 
         private void saveMaterial_Click(object sender, EventArgs e)
