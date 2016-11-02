@@ -15,9 +15,9 @@ namespace LiquidViscosity
         //              V                                    V
         private SimpleOpenGlControl OGLVP;
         public camera camera;
-        public model monkey;
-        private readonly float[] light0Pos = { 1.0f, 1.0f, 1.0f, 0.0f };
-        private readonly float[] light1Pos = { 0.0f, -15.0f, 10.0f, 1.0f };
+        public model tube, tube_inside, bottom, ball, liquid;
+        private readonly float[] light0Pos = { 0.0f, -10.0f, 20.0f, 0.0f };
+        private readonly float[] light1Pos = { 10.0f, 10.0f, 5.0f, 1.0f };
         public bool anim = false;
         public float rot = 0.0f;
         //public int error = 0;
@@ -28,12 +28,17 @@ namespace LiquidViscosity
             OGLVP = _OGLVP;
 
             Gl.glViewport(0, 0, OGLVP.Width, OGLVP.Height);
-            Gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+            Gl.glClearColor(0.7f, 0.7f, 0.8f, 1.0f);
             initLights();
           
             camera = new camera(OGLVP);
-            var filename = "../../models/monkey.obj";
-            monkey = new model(filename);
+
+            string path = "../../models/";
+            tube = new model(path, "tube");
+            tube_inside = new model(path, "tube_inside");
+            bottom = new model(path, "base");
+            ball = new model(path, "ball");
+            liquid = new model(path, "liquid");
 
             Gl.glEnable(Gl.GL_DEPTH_TEST);
             Gl.glBlendFunc(Gl.GL_SRC_ALPHA, Gl.GL_ONE_MINUS_SRC_ALPHA);
@@ -48,7 +53,7 @@ namespace LiquidViscosity
             Gl.glLightfv(Gl.GL_LIGHT0, Gl.GL_POSITION, light0Pos);
             float[] light0Amb = new float[] { 0.3f, 0.3f, 0.3f, 1.0f };
             Gl.glLightfv(Gl.GL_LIGHT0, Gl.GL_AMBIENT, light0Amb);
-            float[] light0Dif = new float[] { 1.0f, 1.0f, 1.0f, 1.0f };
+            float[] light0Dif = new float[] { 1.0f, 1.0f, 1.0f, 0.5f };
             Gl.glLightfv(Gl.GL_LIGHT0, Gl.GL_DIFFUSE, light0Dif);
             float[] light0Spec = new float[] { 1.0f, 1.0f, 1.0f, 1.0f };
             Gl.glLightfv(Gl.GL_LIGHT0, Gl.GL_SPECULAR, light0Spec);
@@ -56,9 +61,9 @@ namespace LiquidViscosity
             Gl.glLightfv(Gl.GL_LIGHT1, Gl.GL_POSITION, light1Pos);
             float[] light1Amb = new float[] { 0.0f, 0.0f, 0.0f, 1.0f };
             Gl.glLightfv(Gl.GL_LIGHT1, Gl.GL_AMBIENT, light1Amb);
-            float[] light1Dif = new float[] { 0.5f, 0.5f, 0.7f, 1.0f };
+            float[] light1Dif = new float[] { 1.0f, 1.0f, 1.0f, 1.0f };
             Gl.glLightfv(Gl.GL_LIGHT1, Gl.GL_DIFFUSE, light1Dif);
-            float[] light1Spec = new float[] { 0.1f, 0.2f, 0.1f, 1.0f };
+            float[] light1Spec = new float[] { 0.3f, 0.3f, 0.3f, 1.0f };
             Gl.glLightfv(Gl.GL_LIGHT1, Gl.GL_SPECULAR, light1Spec);
 
             Gl.glLightf(Gl.GL_LIGHT1, Gl.GL_SPOT_CUTOFF, 100.0f);
@@ -86,41 +91,41 @@ namespace LiquidViscosity
 
             #region оси и плоскость
             // рисуем оси -----------------------------------------------------------
-            Gl.glBegin(Gl.GL_LINES);
-            Gl.glColor3f(0.0f, 1.0f, 0.0f);                // Green for x axis
-            Gl.glVertex3f(0f, 0f, 0f);
-            Gl.glVertex3f(10f, 0f, 0f);
-            Gl.glColor3f(1.0f, 0.0f, 0.0f);                // Red for y axis
-            Gl.glVertex3f(0f, 0f, 0f);
-            Gl.glVertex3f(0f, 10f, 0f);
-            Gl.glColor3f(0.0f, 0.0f, 1.0f);                // Blue for z axis
-            Gl.glVertex3f(0f, 0f, 0f);
-            Gl.glVertex3f(0f, 0f, 10f);
-            Gl.glEnd();
+            //Gl.glBegin(Gl.GL_LINES);
+            //Gl.glColor3f(0.0f, 1.0f, 0.0f);                // Green for x axis
+            //Gl.glVertex3f(0f, 0f, 0f);
+            //Gl.glVertex3f(10f, 0f, 0f);
+            //Gl.glColor3f(1.0f, 0.0f, 0.0f);                // Red for y axis
+            //Gl.glVertex3f(0f, 0f, 0f);
+            //Gl.glVertex3f(0f, 10f, 0f);
+            //Gl.glColor3f(0.0f, 0.0f, 1.0f);                // Blue for z axis
+            //Gl.glVertex3f(0f, 0f, 0f);
+            //Gl.glVertex3f(0f, 0f, 10f);
+            //Gl.glEnd();
 
-            // Dotted lines for the negative sides of x,y,z coordinates
-            Gl.glEnable(Gl.GL_LINE_STIPPLE); // Enable line stipple to use a 
-                                             // dotted pattern for the lines
-            Gl.glLineStipple(1, 0x0101);     // Dotted stipple pattern for the lines
-            Gl.glBegin(Gl.GL_LINES);
-            Gl.glColor3f(0.0f, 1.0f, 0.0f);                    // Green for x axis
-            Gl.glVertex3f(-10f, 0f, 0f);
-            Gl.glVertex3f(0f, 0f, 0f);
-            Gl.glColor3f(1.0f, 0.0f, 0.0f);                    // Red for y axis
-            Gl.glVertex3f(0f, 0f, 0f);
-            Gl.glVertex3f(0f, -10f, 0f);
-            Gl.glColor3f(0.0f, 0.0f, 1.0f);                    // Blue for z axis
-            Gl.glVertex3f(0f, 0f, 0f);
-            Gl.glVertex3f(0f, 0f, -10f);
-            Gl.glEnd();
-            Gl.glDisable(Gl.GL_LINE_STIPPLE);
+            //// Dotted lines for the negative sides of x,y,z coordinates
+            //Gl.glEnable(Gl.GL_LINE_STIPPLE); // Enable line stipple to use a 
+            //                                 // dotted pattern for the lines
+            //Gl.glLineStipple(1, 0x0101);     // Dotted stipple pattern for the lines
+            //Gl.glBegin(Gl.GL_LINES);
+            //Gl.glColor3f(0.0f, 1.0f, 0.0f);                    // Green for x axis
+            //Gl.glVertex3f(-10f, 0f, 0f);
+            //Gl.glVertex3f(0f, 0f, 0f);
+            //Gl.glColor3f(1.0f, 0.0f, 0.0f);                    // Red for y axis
+            //Gl.glVertex3f(0f, 0f, 0f);
+            //Gl.glVertex3f(0f, -10f, 0f);
+            //Gl.glColor3f(0.0f, 0.0f, 1.0f);                    // Blue for z axis
+            //Gl.glVertex3f(0f, 0f, 0f);
+            //Gl.glVertex3f(0f, 0f, -10f);
+            //Gl.glEnd();
+            //Gl.glDisable(Gl.GL_LINE_STIPPLE);
 
             Gl.glBegin(Gl.GL_QUADS);
-            Gl.glColor3f(0.6f, 0.6f, 0.6f);
-            Gl.glVertex3f(10f, 10f, -2f);
-            Gl.glVertex3f(10f, -10f, -2f);
-            Gl.glVertex3f(-10f, -10f, -2f);
-            Gl.glVertex3f(-10f, 10f, -2f);
+            Gl.glColor3f(0.3f, 0.3f, 0.3f);
+            Gl.glVertex3f(10f, 10f, 0.0f);
+            Gl.glVertex3f(10f, -10f, 0.0f);
+            Gl.glVertex3f(-10f, -10f, 0.0f);
+            Gl.glVertex3f(-10f, 10f, 0.0f);
             Gl.glEnd();
             #endregion
 
@@ -132,17 +137,25 @@ namespace LiquidViscosity
             // рисуем модельку---------------------------------------------------
             if (anim)
             {
+                bottom.render();
+
                 Gl.glPushMatrix();
-                Gl.glTranslatef(0.0f, 0.0f, rot * 0.02f);
-                Gl.glRotatef(rot, 0.0f, 0.0f, 1.0f);
-
-                monkey.render();
-
+                Gl.glTranslatef(0.0f, 0.0f, -rot * 0.05f);
+                //Gl.glRotatef(rot, 0.0f, 0.0f, 1.0f);
+                ball.render();
                 Gl.glPopMatrix();
+
+                liquid.render();
+                tube.render();
+                tube_inside.render();
             }
             else
             {
-                monkey.render();
+                bottom.render();
+                ball.render();
+                liquid.render();
+                tube.render();
+                tube_inside.render();
             }
             //error = Gl.glGetError();
             // сообщаем OpenGL что закончили все дела и можно рисовать кадр

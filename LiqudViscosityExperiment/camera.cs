@@ -39,7 +39,7 @@ namespace LiquidViscosity
         public int mouseDX = 0;
         public int mouseDY = 0;
 
-        private double _height = 0.0;
+        private double _height = 7.0;
         public double height
         {
             get { return _height; }
@@ -70,7 +70,7 @@ namespace LiquidViscosity
             }
         }
 
-        private double _R = 10.0;
+        private double _R = 20.0;
         public double R
         {
             get { return _R; }
@@ -95,8 +95,8 @@ namespace LiquidViscosity
             Gl.glMatrixMode(Gl.GL_MODELVIEW);
             Gl.glLoadIdentity();
             Glu.gluLookAt(
-                eye[0], eye[1], eye[2],
-                pivot[0], pivot[1], pivot[2],
+                eye[0], eye[1], eye[2] + _height,
+                pivot[0], pivot[1], pivot[2] + _height,
                 up[0], up[1], up[2]);
         }
 
@@ -144,7 +144,7 @@ namespace LiquidViscosity
 
         public void reset()
         {
-            phi = 45.0; psi = 45.0; R = 10.0; height = 0.0;
+            phi = 45.0; psi = 45.0; R = 20.0; height = 7.0;
 
             eye[0] = R * Math.Cos(_phi) * Math.Cos(_psi);
             eye[1] = R * Math.Sin(_phi) * Math.Cos(_psi);

@@ -77,11 +77,16 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="models\cone.obj" />
-    <None Include="models\cube.obj" />
-    <None Include="models\cylinder.obj" />
-    <None Include="models\monkey.obj" />
-    <None Include="models\sphere.obj" />
+    <None Include="models\ball.material" />
+    <None Include="models\ball.obj" />
+    <None Include="models\base.material" />
+    <None Include="models\base.obj" />
+    <None Include="models\liquid.material" />
+    <None Include="models\liquid.obj" />
+    <None Include="models\tube.material" />
+    <None Include="models\tube.obj" />
+    <None Include="models\tube_inside.material" />
+    <None Include="models\tube_inside.obj" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

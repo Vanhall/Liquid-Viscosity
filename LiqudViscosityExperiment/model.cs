@@ -11,15 +11,18 @@ namespace LiquidViscosity
 {
     class model
     {
+        private string modelPath = "";
+        private string modelName = "";
+
         private int[] VertBuf = new int[1];
         private int[] NormBuf = new int[1];
         private int VertexCount = 0;
 
-        private float[] matAmb = new float[] { 0.2f, 0.2f, 0.2f, 1.0f };
-        private float[] matDif = new float[] { 0.5f, 0.5f, 0.5f, 1.0f };
+        private float[] matAmb = new float[] { 0.0f, 0.0f, 0.0f, 1.0f };
+        private float[] matDif = new float[] { 0.7f, 0.7f, 0.7f, 1.0f };
         private float[] matSpec = new float[] { 0.2f, 0.2f, 0.2f, 1.0f };
-        private float[] matShine = new float[] { 80.0f, 80.0f, 80.0f, 1.0f };
-        private float[] matEmis = new float[] { 0.1f, 0.1f, 0.1f, 1.0f };
+        private float[] matShine = new float[] { 60.0f, 60.0f, 60.0f, 1.0f };
+        private float[] matEmis = new float[] { 0.0f, 0.0f, 0.0f, 1.0f };
 
         public void setMatAttrib(string attrib, float R, float G, float B, float A )
         {
@@ -80,15 +83,48 @@ namespace LiquidViscosity
             return RetVector;
         }
 
-        public model(string Fname)
+        public void saveMaterial()
         {
+            if (File.Exists(modelPath + modelName + ".material"))
+                File.Delete(modelPath + modelName + ".material");
+            StreamWriter outFile = new StreamWriter(modelPath + modelName + ".material");
+            outFile.WriteLine("ambient " + string.Join(" ", matAmb));
+            outFile.WriteLine("diffuse " + string.Join(" ", matDif));
+            outFile.WriteLine("specular " + string.Join(" ", matSpec));
+            float[] matShineNorm = new float[4];
+            for (int i = 0; i < 4; i++) matShineNorm[i] = matShine[i] / 128;
+            outFile.WriteLine("shininess " + string.Join(" ", matShineNorm));
+            outFile.WriteLine("emission " + string.Join(" ", matEmis));
+            outFile.Close();
+        }
+
+        public model(string path, string name)
+        {
+            modelName = name;
+            modelPath = path;
+
+            #region читаем материал из файла
+            if(File.Exists(path + name + ".material"))
+            {
+                string[] matAttribs = File.ReadAllLines(path + name + ".material");
+                for (int i = 0; i < matAttribs.Length && i < 5; i++)
+                {
+                    string[] matParams = matAttribs[i].Split(' ');
+                    float[] RGBA = new float[4];
+                    for (int j = 0; j < 4; j++)
+                        RGBA[j] = float.Parse(matParams[j + 1]);
+                    setMatAttrib(matParams[0], RGBA[0], RGBA[1], RGBA[2], RGBA[3]);
+                }
+            }
+            #endregion
+
             #region Obj parser
             List<float> VertexCoords = new List<float>();
             List<float> NormalCoords = new List<float>();
             List<int> VIndexes = new List<int>();
             List<int> NIndexes = new List<int>();
 
-            string[] ObjContent = File.ReadAllLines(Fname);
+            string[] ObjContent = File.ReadAllLines(path + name + ".obj");
             string[][] ObjSplit = new string[ObjContent.Length][];
             for (int i = 0; i < ObjContent.Length; i++)
             {

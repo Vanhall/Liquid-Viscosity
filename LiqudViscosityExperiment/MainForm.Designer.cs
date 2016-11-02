@@ -46,6 +46,10 @@
             this.справкаПоЭкспериментуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оПрограммеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.liquidSelector = new System.Windows.Forms.RadioButton();
+            this.ballSelector = new System.Windows.Forms.RadioButton();
+            this.bottomSelector = new System.Windows.Forms.RadioButton();
+            this.tubeSelector = new System.Windows.Forms.RadioButton();
             this.AllIndicator = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.AllSlider = new System.Windows.Forms.TrackBar();
@@ -67,6 +71,7 @@
             this.ComponentSlider = new System.Windows.Forms.TrackBar();
             this.OGLVP = new Tao.Platform.Windows.SimpleOpenGlControl();
             this.AnimationTimer = new System.Windows.Forms.Timer(this.components);
+            this.saveMaterial = new System.Windows.Forms.Button();
             this.contolPanelGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BallDensity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BallRadius)).BeginInit();
@@ -239,6 +244,11 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.saveMaterial);
+            this.groupBox1.Controls.Add(this.liquidSelector);
+            this.groupBox1.Controls.Add(this.ballSelector);
+            this.groupBox1.Controls.Add(this.bottomSelector);
+            this.groupBox1.Controls.Add(this.tubeSelector);
             this.groupBox1.Controls.Add(this.AllIndicator);
             this.groupBox1.Controls.Add(this.label10);
             this.groupBox1.Controls.Add(this.AllSlider);
@@ -260,15 +270,61 @@
             this.groupBox1.Controls.Add(this.ComponentSlider);
             this.groupBox1.Location = new System.Drawing.Point(767, 305);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(241, 412);
+            this.groupBox1.Size = new System.Drawing.Size(241, 430);
             this.groupBox1.TabIndex = 2;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Настройка материала";
             // 
+            // liquidSelector
+            // 
+            this.liquidSelector.AutoSize = true;
+            this.liquidSelector.Location = new System.Drawing.Point(123, 339);
+            this.liquidSelector.Name = "liquidSelector";
+            this.liquidSelector.Size = new System.Drawing.Size(53, 17);
+            this.liquidSelector.TabIndex = 15;
+            this.liquidSelector.Text = "Liquid";
+            this.liquidSelector.UseVisualStyleBackColor = true;
+            this.liquidSelector.CheckedChanged += new System.EventHandler(this.tubeiSelector_CheckedChanged);
+            // 
+            // ballSelector
+            // 
+            this.ballSelector.AutoSize = true;
+            this.ballSelector.Location = new System.Drawing.Point(123, 366);
+            this.ballSelector.Name = "ballSelector";
+            this.ballSelector.Size = new System.Drawing.Size(42, 17);
+            this.ballSelector.TabIndex = 15;
+            this.ballSelector.Text = "Ball";
+            this.ballSelector.UseVisualStyleBackColor = true;
+            this.ballSelector.CheckedChanged += new System.EventHandler(this.ballSelector_CheckedChanged);
+            // 
+            // bottomSelector
+            // 
+            this.bottomSelector.AutoSize = true;
+            this.bottomSelector.Location = new System.Drawing.Point(21, 366);
+            this.bottomSelector.Name = "bottomSelector";
+            this.bottomSelector.Size = new System.Drawing.Size(58, 17);
+            this.bottomSelector.TabIndex = 15;
+            this.bottomSelector.Text = "Bottom";
+            this.bottomSelector.UseVisualStyleBackColor = true;
+            this.bottomSelector.CheckedChanged += new System.EventHandler(this.bottomSelector_CheckedChanged);
+            // 
+            // tubeSelector
+            // 
+            this.tubeSelector.AutoSize = true;
+            this.tubeSelector.Checked = true;
+            this.tubeSelector.Location = new System.Drawing.Point(21, 340);
+            this.tubeSelector.Name = "tubeSelector";
+            this.tubeSelector.Size = new System.Drawing.Size(50, 17);
+            this.tubeSelector.TabIndex = 14;
+            this.tubeSelector.TabStop = true;
+            this.tubeSelector.Text = "Tube";
+            this.tubeSelector.UseVisualStyleBackColor = true;
+            this.tubeSelector.CheckedChanged += new System.EventHandler(this.tubeSelector_CheckedChanged);
+            // 
             // AllIndicator
             // 
             this.AllIndicator.AutoSize = true;
-            this.AllIndicator.Location = new System.Drawing.Point(207, 324);
+            this.AllIndicator.Location = new System.Drawing.Point(207, 302);
             this.AllIndicator.Name = "AllIndicator";
             this.AllIndicator.Size = new System.Drawing.Size(28, 13);
             this.AllIndicator.TabIndex = 13;
@@ -277,7 +333,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(7, 324);
+            this.label10.Location = new System.Drawing.Point(7, 302);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(18, 13);
             this.label10.TabIndex = 12;
@@ -285,7 +341,7 @@
             // 
             // AllSlider
             // 
-            this.AllSlider.Location = new System.Drawing.Point(21, 310);
+            this.AllSlider.Location = new System.Drawing.Point(21, 288);
             this.AllSlider.Maximum = 100;
             this.AllSlider.Name = "AllSlider";
             this.AllSlider.Size = new System.Drawing.Size(180, 45);
@@ -327,9 +383,9 @@
             // 
             // refresh
             // 
-            this.refresh.Location = new System.Drawing.Point(50, 361);
+            this.refresh.Location = new System.Drawing.Point(6, 389);
             this.refresh.Name = "refresh";
-            this.refresh.Size = new System.Drawing.Size(151, 23);
+            this.refresh.Size = new System.Drawing.Size(100, 23);
             this.refresh.TabIndex = 6;
             this.refresh.Text = "SET";
             this.refresh.UseVisualStyleBackColor = true;
@@ -477,6 +533,16 @@
             this.AnimationTimer.Interval = 16;
             this.AnimationTimer.Tick += new System.EventHandler(this.AnimationTimer_Tick);
             // 
+            // saveMaterial
+            // 
+            this.saveMaterial.Location = new System.Drawing.Point(135, 389);
+            this.saveMaterial.Name = "saveMaterial";
+            this.saveMaterial.Size = new System.Drawing.Size(100, 23);
+            this.saveMaterial.TabIndex = 16;
+            this.saveMaterial.Text = "SAVE";
+            this.saveMaterial.UseVisualStyleBackColor = true;
+            this.saveMaterial.Click += new System.EventHandler(this.saveMaterial_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -550,6 +616,11 @@
         private System.Windows.Forms.Label AllIndicator;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TrackBar AllSlider;
+        private System.Windows.Forms.RadioButton liquidSelector;
+        private System.Windows.Forms.RadioButton ballSelector;
+        private System.Windows.Forms.RadioButton bottomSelector;
+        private System.Windows.Forms.RadioButton tubeSelector;
+        private System.Windows.Forms.Button saveMaterial;
     }
 }
 

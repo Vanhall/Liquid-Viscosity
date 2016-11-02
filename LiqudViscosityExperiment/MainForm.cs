@@ -17,6 +17,7 @@ namespace LiquidViscosity
     {
         double D, R;
         scene scene;
+        model modelSelector;
         string tempMatComp = "ambient";
 
         public Main()
@@ -35,6 +36,7 @@ namespace LiquidViscosity
             radiusLabel.Text = R.ToString("F1") + " мм";
             radiusLabel.Left = (int)(contolPanelGroup.Size.Width - radiusLabel.Size.Width) / 2;
             scene = new scene(OGLVP);   // Создаем новую "сцену" см. scene.cs
+            modelSelector = scene.tube;
             setSliders(tempMatComp);
         }
 
@@ -164,7 +166,7 @@ namespace LiquidViscosity
 
         private void setSliders(string attrib)
         {
-            float[] values = scene.monkey.getMatAttrib(attrib);
+            float[] values = modelSelector.getMatAttrib(attrib);
             RSlider.Value = (int)(values[0] * 100);
             GSlider.Value = (int)(values[1] * 100);
             BSlider.Value = (int)(values[2] * 100);
@@ -220,11 +222,19 @@ namespace LiquidViscosity
 
         private void SET_Click(object sender, EventArgs e)
         {
-            scene.monkey.setMatAttrib(tempMatComp,
+            modelSelector.setMatAttrib(tempMatComp,
                 RSlider.Value / 100.0f,
                 GSlider.Value / 100.0f,
                 BSlider.Value / 100.0f,
                 AlphaSlider.Value / 100.0f);
+            if(modelSelector == scene.tube)
+            {
+                scene.tube_inside.setMatAttrib(tempMatComp,
+                RSlider.Value / 100.0f,
+                GSlider.Value / 100.0f,
+                BSlider.Value / 100.0f,
+                AlphaSlider.Value / 100.0f);
+            }
             scene.render();
         }
 
@@ -274,6 +284,32 @@ namespace LiquidViscosity
             // см. scene.cs -> render()
             scene.render();
             scene.rot += 1.5f;
+        }
+
+        private void tubeSelector_CheckedChanged(object sender, EventArgs e)
+        {
+            if (tubeSelector.Checked) modelSelector = scene.tube;
+        }
+
+        private void tubeiSelector_CheckedChanged(object sender, EventArgs e)
+        {
+            if (liquidSelector.Checked) modelSelector = scene.liquid;
+        }
+
+        private void bottomSelector_CheckedChanged(object sender, EventArgs e)
+        {
+            if (bottomSelector.Checked) modelSelector = scene.bottom;
+        }
+
+        private void ballSelector_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ballSelector.Checked) modelSelector = scene.ball;
+        }
+
+        private void saveMaterial_Click(object sender, EventArgs e)
+        {
+            modelSelector.saveMaterial();
+            if (modelSelector == scene.tube) scene.tube_inside.saveMaterial();
         }
 
         private void BallRadius_Scroll(object sender, EventArgs e)
