@@ -1,10 +1,4 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tao.OpenGl;
+﻿using Tao.OpenGl;
 using Tao.Platform.Windows;
 
 namespace LiquidViscosity
@@ -16,6 +10,7 @@ namespace LiquidViscosity
         private SimpleOpenGlControl OGLVP;
         public camera camera;
         public model tube, tube_inside, bottom, ball, liquid;
+        material glass, blackPlastic, grayMetal, water;
         private readonly float[] light0Pos = { 0.0f, -10.0f, 20.0f, 0.0f };
         private readonly float[] light1Pos = { 10.0f, 10.0f, 5.0f, 1.0f };
         public bool anim = false;
@@ -34,11 +29,25 @@ namespace LiquidViscosity
             camera = new camera(OGLVP);
 
             string path = "../../models/";
+
+            glass = new material(path, "glass");
+            blackPlastic = new material(path, "blackPlastic");
+            grayMetal = new material(path, "grayMetal");
+            water = new material(path, "water");
+
             tube = new model(path, "tube");
             tube_inside = new model(path, "tube_inside");
+            tube.setMaterial(glass);
+            tube_inside.setMaterial(glass);
+
             bottom = new model(path, "base");
+            bottom.setMaterial(blackPlastic);
+
             ball = new model(path, "ball");
+            ball.setMaterial(grayMetal);
+
             liquid = new model(path, "liquid");
+            liquid.setMaterial(water);
 
             Gl.glEnable(Gl.GL_DEPTH_TEST);
             Gl.glBlendFunc(Gl.GL_SRC_ALPHA, Gl.GL_ONE_MINUS_SRC_ALPHA);

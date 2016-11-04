@@ -17,7 +17,7 @@ namespace LiquidViscosity
     {
         double D, R;
         scene scene;
-        model modelSelector;
+        material matSelector;
         string tempMatComp = "ambient";
 
         public Main()
@@ -36,7 +36,7 @@ namespace LiquidViscosity
             radiusLabel.Text = R.ToString("F1") + " мм";
             radiusLabel.Left = (int)(contolPanelGroup.Size.Width - radiusLabel.Size.Width) / 2;
             scene = new scene(OGLVP);   // Создаем новую "сцену" см. scene.cs
-            modelSelector = scene.tube;
+            matSelector = scene.tube.mat;
             setSliders(tempMatComp);
         }
 
@@ -166,7 +166,7 @@ namespace LiquidViscosity
 
         private void setSliders(string attrib)
         {
-            float[] values = modelSelector.getMatAttrib(attrib);
+            float[] values = matSelector.getAttrib(attrib);
             RSlider.Value = (int)(values[0] * 100);
             GSlider.Value = (int)(values[1] * 100);
             BSlider.Value = (int)(values[2] * 100);
@@ -222,14 +222,14 @@ namespace LiquidViscosity
 
         private void SET_Click(object sender, EventArgs e)
         {
-            modelSelector.setMatAttrib(tempMatComp,
+            matSelector.setAttrib(tempMatComp,
                 RSlider.Value / 100.0f,
                 GSlider.Value / 100.0f,
                 BSlider.Value / 100.0f,
                 AlphaSlider.Value / 100.0f);
-            if(modelSelector == scene.tube)
+            if(matSelector == scene.tube.mat)
             {
-                scene.tube_inside.setMatAttrib(tempMatComp,
+                scene.tube_inside.mat.setAttrib(tempMatComp,
                 RSlider.Value / 100.0f,
                 GSlider.Value / 100.0f,
                 BSlider.Value / 100.0f,
@@ -290,7 +290,7 @@ namespace LiquidViscosity
         {
             if (tubeSelector.Checked)
             {
-                modelSelector = scene.tube;
+                matSelector = scene.tube.mat;
                 setSliders(tempMatComp);
             }
 
@@ -300,7 +300,7 @@ namespace LiquidViscosity
         {
             if (liquidSelector.Checked)
             {
-                modelSelector = scene.liquid;
+                matSelector = scene.liquid.mat;
                 setSliders(tempMatComp);
             }
         }
@@ -309,7 +309,7 @@ namespace LiquidViscosity
         {
             if (bottomSelector.Checked)
             {
-                modelSelector = scene.bottom;
+                matSelector = scene.bottom.mat;
                 setSliders(tempMatComp);
             }
         }
@@ -318,15 +318,15 @@ namespace LiquidViscosity
         {
             if (ballSelector.Checked)
             {
-                modelSelector = scene.ball;
+                matSelector = scene.ball.mat;
                 setSliders(tempMatComp);
             }
         }
 
         private void saveMaterial_Click(object sender, EventArgs e)
         {
-            modelSelector.saveMaterial();
-            if (modelSelector == scene.tube) scene.tube_inside.saveMaterial();
+            matSelector.saveMaterial();
+            if (matSelector == scene.tube.mat) scene.tube_inside.mat.saveMaterial();
         }
 
         private void BallRadius_Scroll(object sender, EventArgs e)

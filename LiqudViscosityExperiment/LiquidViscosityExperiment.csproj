@@ -60,6 +60,7 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="material.cs" />
     <Compile Include="model.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -77,16 +78,15 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="models\ball.material" />
     <None Include="models\ball.obj" />
-    <None Include="models\base.material" />
     <None Include="models\base.obj" />
-    <None Include="models\liquid.material" />
+    <None Include="models\blackPlastic.material" />
+    <None Include="models\glass.material" />
+    <None Include="models\grayMetal.material" />
     <None Include="models\liquid.obj" />
-    <None Include="models\tube.material" />
     <None Include="models\tube.obj" />
-    <None Include="models\tube_inside.material" />
     <None Include="models\tube_inside.obj" />
+    <None Include="models\water.material" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using Tao.OpenGl;
-using Tao.Platform.Windows;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LiquidViscosity
 {
@@ -18,106 +14,17 @@ namespace LiquidViscosity
         private int[] NormBuf = new int[1];
         private int VertexCount = 0;
 
-        private float[] matAmb = new float[] { 0.0f, 0.0f, 0.0f, 1.0f };
-        private float[] matDif = new float[] { 0.7f, 0.7f, 0.7f, 1.0f };
-        private float[] matSpec = new float[] { 0.2f, 0.2f, 0.2f, 1.0f };
-        private float[] matShine = new float[] { 60.0f, 60.0f, 60.0f, 1.0f };
-        private float[] matEmis = new float[] { 0.0f, 0.0f, 0.0f, 1.0f };
-
-        public void setMatAttrib(string attrib, float R, float G, float B, float A )
+        public material mat;
+        public void setMaterial(material new_mat)
         {
-            float[] AttribVector = new float[] { R, G, B, A };
-            switch(attrib)
-            {
-                case "ambient":
-                    {
-                        matAmb = AttribVector;
-                    } break;
-                case "diffuse":
-                    {
-                        matDif = AttribVector;
-                    }
-                    break;
-                case "specular":
-                    {
-                        matSpec = AttribVector;
-                    }
-                    break;
-                case "shininess":
-                    {
-                        AttribVector[0] *= 128; AttribVector[1] *= 128;
-                        AttribVector[2] *= 128; AttribVector[3] *= 128;
-                        matShine = AttribVector;
-                    }
-                    break;
-                case "emission":
-                    {
-                        matEmis = AttribVector;
-                    }
-                    break;
-            }
-        }
-
-        public float[] getMatAttrib(string attrib)
-        {
-            float[] RetVector = new float[4];
-            switch (attrib)
-            {
-                case "ambient":
-                    RetVector = matAmb;
-                    break;
-                case "diffuse":
-                    RetVector = matDif;
-                    break;
-                case "specular":
-                    RetVector = matSpec;
-                    break;
-                case "shininess":
-                    matShine.CopyTo(RetVector, 0);
-                    for (int i = 0; i < 4; i++) RetVector[i] /= 128;
-                    break;
-                case "emission":
-                    RetVector = matEmis;
-                    break;
-            }
-            return RetVector;
-        }
-
-        public void saveMaterial()
-        {
-            if (File.Exists(modelPath + modelName + ".material"))
-                File.Delete(modelPath + modelName + ".material");
-            StreamWriter outFile = new StreamWriter(modelPath + modelName + ".material");
-            outFile.WriteLine("ambient " + string.Join(" ", matAmb));
-            outFile.WriteLine("diffuse " + string.Join(" ", matDif));
-            outFile.WriteLine("specular " + string.Join(" ", matSpec));
-            float[] matShineNorm = new float[4];
-            for (int i = 0; i < 4; i++) matShineNorm[i] = matShine[i] / 128;
-            outFile.WriteLine("shininess " + string.Join(" ", matShineNorm));
-            outFile.WriteLine("emission " + string.Join(" ", matEmis));
-            outFile.Close();
+            mat = new_mat;
         }
 
         public model(string path, string name)
         {
             modelName = name;
             modelPath = path;
-
-            #region читаем материал из файла
-            if(File.Exists(path + name + ".material"))
-            {
-                string[] matAttribs = File.ReadAllLines(path + name + ".material");
-                for (int i = 0; i < matAttribs.Length && i < 5; i++)
-                {
-                    string[] matParams = matAttribs[i].Split(' ');
-                    float[] RGBA = new float[4];
-                    for (int j = 0; j < 4; j++)
-                        RGBA[j] = float.Parse(matParams[j + 1]);
-                    setMatAttrib(matParams[0], RGBA[0], RGBA[1], RGBA[2], RGBA[3]);
-                }
-            }
-            #endregion
-
+            
             #region Obj parser
             List<float> VertexCoords = new List<float>();
             List<float> NormalCoords = new List<float>();
@@ -183,11 +90,7 @@ namespace LiquidViscosity
 
         public void render()
         {
-            Gl.glMaterialfv(Gl.GL_FRONT, Gl.GL_AMBIENT, matAmb);
-            Gl.glMaterialfv(Gl.GL_FRONT, Gl.GL_DIFFUSE, matDif);
-            Gl.glMaterialfv(Gl.GL_FRONT, Gl.GL_SPECULAR, matSpec);
-            Gl.glMaterialfv(Gl.GL_FRONT, Gl.GL_SHININESS, matShine);
-            Gl.glMaterialfv(Gl.GL_FRONT, Gl.GL_EMISSION, matEmis);
+            mat.applyMaterial();
 
             Gl.glEnableClientState(Gl.GL_VERTEX_ARRAY);
             Gl.glBindBuffer(Gl.GL_ARRAY_BUFFER, VertBuf[0]);
