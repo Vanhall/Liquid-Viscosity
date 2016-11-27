@@ -3,19 +3,21 @@ using Tao.Platform.Windows;
 
 namespace LiquidViscosity
 {
-    class scene
+    public class scene
     {
-        // ------------ | Тут пока что творческий беспорядок | ----------------
-        //              V                                    V
         private SimpleOpenGlControl OGLVP;
         public camera camera;
-        public model tube, tube_inside, bottom, ball, liquid;
-        material glass, blackPlastic, grayMetal, water;
+        public model tube, tube_inside, bottom, table, ball, liquid;
+        public material glass, blackPlastic, wood,
+            lead, steel, brass,
+            water, glicerene, oil;
+
         private readonly float[] light0Pos = { 0.0f, -10.0f, 20.0f, 0.0f };
         private readonly float[] light1Pos = { 10.0f, 10.0f, 5.0f, 1.0f };
-        public bool anim = false;
-        public float rot = 0.0f;
-        //public int error = 0;
+
+        public float H0 = 7.25f;
+        public float dH = 0;
+        public float Scale = 1.0f;
 
         // конструктор сцены
         public scene(SimpleOpenGlControl _OGLVP)
@@ -32,8 +34,13 @@ namespace LiquidViscosity
 
             glass = new material(path, "glass");
             blackPlastic = new material(path, "blackPlastic");
-            grayMetal = new material(path, "grayMetal");
+            wood = new material(path, "wood");
+            lead = new material(path, "grayMetal");
+            steel = new material(path, "steel");
+            brass = new material(path, "brass");
             water = new material(path, "water");
+            glicerene = new material(path, "glicerene");
+            oil = new material(path, "oil");
 
             tube = new model(path, "tube");
             tube_inside = new model(path, "tube_inside");
@@ -43,19 +50,24 @@ namespace LiquidViscosity
             bottom = new model(path, "base");
             bottom.setMaterial(blackPlastic);
 
+            table = new model(path, "table");
+            table.setMaterial(wood);
+
             ball = new model(path, "ball");
-            ball.setMaterial(grayMetal);
+            ball.setMaterial(lead);
 
             liquid = new model(path, "liquid");
             liquid.setMaterial(water);
 
             Gl.glEnable(Gl.GL_DEPTH_TEST);
+            Gl.glEnable(Gl.GL_NORMALIZE);
+            Gl.glEnable(Gl.GL_LIGHTING);
             Gl.glBlendFunc(Gl.GL_SRC_ALPHA, Gl.GL_ONE_MINUS_SRC_ALPHA);
-            render();
+            Gl.glEnable(Gl.GL_BLEND);
+            Gl.glEnable(Gl.GL_CULL_FACE);
         }
 
-        #region ДА БУДЕТ СВЕТ!
-        // сказал монтёр и перерезал провода
+        #region Освещение
 
         private void initLights()
         {
@@ -93,80 +105,21 @@ namespace LiquidViscosity
             // ставим свет (нужно вызывать каждый раз, иначе будет двигаться вместе с камерой)
             Gl.glLightfv(Gl.GL_LIGHT0, Gl.GL_POSITION, light0Pos);
             Gl.glLightfv(Gl.GL_LIGHT1, Gl.GL_POSITION, light1Pos);
+            
+            // рисуем модельки
+            table.render();
+            bottom.render();
 
-            // отключаем свет чтобы оси рисовались сплошными и яркими
-            Gl.glDisable(Gl.GL_LIGHTING);
-            Gl.glDisable(Gl.GL_CULL_FACE);
+            Gl.glPushMatrix();
+            Gl.glTranslatef(0.0f, 0.0f, H0 - dH);
+            Gl.glScalef(Scale, Scale, Scale);
+            ball.render();
+            Gl.glPopMatrix();
 
-            #region оси и плоскость
-            // рисуем оси -----------------------------------------------------------
-            //Gl.glBegin(Gl.GL_LINES);
-            //Gl.glColor3f(0.0f, 1.0f, 0.0f);                // Green for x axis
-            //Gl.glVertex3f(0f, 0f, 0f);
-            //Gl.glVertex3f(10f, 0f, 0f);
-            //Gl.glColor3f(1.0f, 0.0f, 0.0f);                // Red for y axis
-            //Gl.glVertex3f(0f, 0f, 0f);
-            //Gl.glVertex3f(0f, 10f, 0f);
-            //Gl.glColor3f(0.0f, 0.0f, 1.0f);                // Blue for z axis
-            //Gl.glVertex3f(0f, 0f, 0f);
-            //Gl.glVertex3f(0f, 0f, 10f);
-            //Gl.glEnd();
-
-            //// Dotted lines for the negative sides of x,y,z coordinates
-            //Gl.glEnable(Gl.GL_LINE_STIPPLE); // Enable line stipple to use a 
-            //                                 // dotted pattern for the lines
-            //Gl.glLineStipple(1, 0x0101);     // Dotted stipple pattern for the lines
-            //Gl.glBegin(Gl.GL_LINES);
-            //Gl.glColor3f(0.0f, 1.0f, 0.0f);                    // Green for x axis
-            //Gl.glVertex3f(-10f, 0f, 0f);
-            //Gl.glVertex3f(0f, 0f, 0f);
-            //Gl.glColor3f(1.0f, 0.0f, 0.0f);                    // Red for y axis
-            //Gl.glVertex3f(0f, 0f, 0f);
-            //Gl.glVertex3f(0f, -10f, 0f);
-            //Gl.glColor3f(0.0f, 0.0f, 1.0f);                    // Blue for z axis
-            //Gl.glVertex3f(0f, 0f, 0f);
-            //Gl.glVertex3f(0f, 0f, -10f);
-            //Gl.glEnd();
-            //Gl.glDisable(Gl.GL_LINE_STIPPLE);
-
-            Gl.glBegin(Gl.GL_QUADS);
-            Gl.glColor3f(0.3f, 0.3f, 0.3f);
-            Gl.glVertex3f(10f, 10f, 0.0f);
-            Gl.glVertex3f(10f, -10f, 0.0f);
-            Gl.glVertex3f(-10f, -10f, 0.0f);
-            Gl.glVertex3f(-10f, 10f, 0.0f);
-            Gl.glEnd();
-            #endregion
-
-            // включаем свет обратно
-            Gl.glEnable(Gl.GL_LIGHTING);
-            Gl.glEnable(Gl.GL_BLEND);
-            Gl.glEnable(Gl.GL_CULL_FACE);
-
-            // рисуем модельку---------------------------------------------------
-            if (anim)
-            {
-                bottom.render();
-
-                Gl.glPushMatrix();
-                Gl.glTranslatef(0.0f, 0.0f, -rot * 0.05f);
-                //Gl.glRotatef(rot, 0.0f, 0.0f, 1.0f);
-                ball.render();
-                Gl.glPopMatrix();
-
-                liquid.render();
-                tube.render();
-                tube_inside.render();
-            }
-            else
-            {
-                bottom.render();
-                ball.render();
-                liquid.render();
-                tube.render();
-                tube_inside.render();
-            }
-            //error = Gl.glGetError();
+            liquid.render();
+            tube.render();
+            tube_inside.render();
+            
             // сообщаем OpenGL что закончили все дела и можно рисовать кадр
             Gl.glFlush();
             OGLVP.Invalidate();

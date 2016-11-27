@@ -5,7 +5,7 @@ using Tao.OpenGl;
 
 namespace LiquidViscosity
 {
-    class model
+    public class model
     {
         private string modelPath = "";
         private string modelName = "";
@@ -25,41 +25,33 @@ namespace LiquidViscosity
             modelName = name;
             modelPath = path;
             
-            #region Obj parser
+            #region парсер файлов .obj
             List<float> VertexCoords = new List<float>();
             List<float> NormalCoords = new List<float>();
             List<int> VIndexes = new List<int>();
             List<int> NIndexes = new List<int>();
 
             string[] ObjContent = File.ReadAllLines(path + name + ".obj");
-            string[][] ObjSplit = new string[ObjContent.Length][];
             for (int i = 0; i < ObjContent.Length; i++)
             {
-                ObjSplit[i] = ObjContent[i].Split(' ', '/');
-                if (ObjSplit[i][0] == "v")
-                {
+                string[] line = ObjContent[i].Split(' ', '/');
+
+                if (line[0] == "v")
                     for (int j = 1; j < 4; j++)
-                    {
-                        VertexCoords.Add(float.Parse(ObjSplit[i][j],
+                        VertexCoords.Add(float.Parse(line[j],
                             System.Globalization.CultureInfo.InvariantCulture));
-                    }
-                }
-                if (ObjSplit[i][0] == "vn")
-                {
+
+                if (line[0] == "vn")
                     for (int j = 1; j < 4; j++)
-                    {
-                        NormalCoords.Add(float.Parse(ObjSplit[i][j],
+                        NormalCoords.Add(float.Parse(line[j],
                             System.Globalization.CultureInfo.InvariantCulture));
-                    }
-                }
-                if (ObjSplit[i][0] == "f")
-                {
+
+                if (line[0] == "f")
                     for (int j = 1; j < 9; j += 3)
                     {
-                        VIndexes.Add(int.Parse(ObjSplit[i][j]));
-                        NIndexes.Add(int.Parse(ObjSplit[i][j + 2]));
+                        VIndexes.Add(int.Parse(line[j]));
+                        NIndexes.Add(int.Parse(line[j + 2]));
                     }
-                }
             }
 
             VertexCount = VIndexes.Count;

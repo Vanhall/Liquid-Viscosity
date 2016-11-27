@@ -4,7 +4,7 @@ using Tao.Platform.Windows;
 
 namespace LiquidViscosity
 {
-    class camera
+    public class camera
     {
         #region Вспомогательные функции
         private double ToRad(double angle)
@@ -18,30 +18,36 @@ namespace LiquidViscosity
         }
         #endregion
 
-        #region Константы
+        #region Константы и оганичители движения камеры
         private const double FOV = 45, zNear = 0.1, zFar = 200;
 
-        private const double phiMax = 360, phiMin = 0;
-        private const double psiMax = 70, psiMin = -70;
-        private const double RMax = 50, RMin = 5;
+        private const double phiMax = 360.0, phiMin = 0.0;
+        private const double psiMax = 75.0, psiMin = 1.0;
+        private const double RMax = 18.0, RMin = 5.0;
+        private const double HeightMax = 11.0, HeightMin = 0.0;
         #endregion
 
         private double[] eye = new double[3];
         private double[] pivot = new double[3] { 0, 0, 0 };
         private double[] up = new double[3] { 0, 0, 1 };
 
-        #region МАТАН
+        #region параметры камеры
         public bool moving = false;
         public int mouseDX = 0;
         public int mouseDY = 0;
 
-        private double _height = 7.0;
+        private double _height = 4.2;
         public double height
         {
             get { return _height; }
-            set { _height = value; }
+            set
+            {
+                if (value >= HeightMax) _height = HeightMax;
+                else if (value <= HeightMin) _height = HeightMin;
+                else _height = value;
+            }
         }
-        // -------------сферические координаты (для камеры)-------------
+        // -------------------- сферические координаты ---------------------
         private double _phi = Math.PI / 4;
         public double phi
         {
@@ -54,7 +60,7 @@ namespace LiquidViscosity
             }
         }
 
-        private double _psi = Math.PI / 4;
+        private double _psi = Math.PI / 6;
         public double psi
         {
             get { return ToDeg(_psi); }
@@ -66,7 +72,7 @@ namespace LiquidViscosity
             }
         }
 
-        private double _R = 20.0;
+        private double _R = 11.0;
         public double R
         {
             get { return _R; }
@@ -87,7 +93,7 @@ namespace LiquidViscosity
             eye[2] = R * Math.Sin(_psi);
             Gl.glMatrixMode(Gl.GL_PROJECTION);
             Gl.glLoadIdentity();
-            Glu.gluPerspective(FOV, OGLVP.Width / OGLVP.Height, zNear, zFar);
+            Glu.gluPerspective(FOV, (double)OGLVP.Width / (double)OGLVP.Height, zNear, zFar);
             Gl.glMatrixMode(Gl.GL_MODELVIEW);
             Gl.glLoadIdentity();
             Glu.gluLookAt(
@@ -140,7 +146,7 @@ namespace LiquidViscosity
 
         public void reset()
         {
-            phi = 45.0; psi = 45.0; R = 20.0; height = 7.0;
+            phi = 45.0; psi = 30.0; R = 11.0; height = 4.2;
 
             eye[0] = R * Math.Cos(_phi) * Math.Cos(_psi);
             eye[1] = R * Math.Sin(_phi) * Math.Cos(_psi);

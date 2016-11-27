@@ -3,7 +3,7 @@ using Tao.OpenGl;
 
 namespace LiquidViscosity
 {
-    class material
+    public class material
     {
         private string matPath = "";
         private string matName = "";
