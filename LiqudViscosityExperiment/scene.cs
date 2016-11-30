@@ -1,4 +1,5 @@
 ﻿using Tao.OpenGl;
+using System.IO;
 using Tao.Platform.Windows;
 
 namespace LiquidViscosity
@@ -30,7 +31,7 @@ namespace LiquidViscosity
           
             camera = new camera(OGLVP);
 
-            string path = "../../models/";
+            string path = Directory.GetCurrentDirectory() + "/Models/";
 
             glass = new material(path, "glass");
             blackPlastic = new material(path, "blackPlastic");

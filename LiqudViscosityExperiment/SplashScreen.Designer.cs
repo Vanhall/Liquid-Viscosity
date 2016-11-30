@@ -42,12 +42,11 @@
             // SplashImage
             // 
             this.SplashImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.SplashImage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.SplashImage.Image = global::LiquidViscosity.Properties.Resources.Splash;
             this.SplashImage.InitialImage = global::LiquidViscosity.Properties.Resources.Splash;
             this.SplashImage.Location = new System.Drawing.Point(0, 0);
             this.SplashImage.Name = "SplashImage";
-            this.SplashImage.Size = new System.Drawing.Size(575, 327);
+            this.SplashImage.Size = new System.Drawing.Size(500, 281);
             this.SplashImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.SplashImage.TabIndex = 0;
             this.SplashImage.TabStop = false;
@@ -56,7 +55,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(575, 327);
+            this.ClientSize = new System.Drawing.Size(500, 281);
             this.ControlBox = false;
             this.Controls.Add(this.SplashImage);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;

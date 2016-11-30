@@ -46,21 +46,21 @@
             this.SettingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.FileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.справкаПоЭкспериментуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.оПрограммеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ExpHelpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.AboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OGLVP = new Tao.Platform.Windows.SimpleOpenGlControl();
             this.AnimationTimer = new System.Windows.Forms.Timer(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
+            this.label6 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.label6 = new System.Windows.Forms.Label();
             this.contolPanelGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.BallMaterial)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BallRadius)).BeginInit();
@@ -229,23 +229,25 @@
             // справкаToolStripMenuItem
             // 
             this.справкаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.справкаПоЭкспериментуToolStripMenuItem,
-            this.оПрограммеToolStripMenuItem});
+            this.ExpHelpToolStripMenuItem,
+            this.AboutToolStripMenuItem});
             this.справкаToolStripMenuItem.Name = "справкаToolStripMenuItem";
             this.справкаToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
             this.справкаToolStripMenuItem.Text = "Справка";
             // 
-            // справкаПоЭкспериментуToolStripMenuItem
+            // ExpHelpToolStripMenuItem
             // 
-            this.справкаПоЭкспериментуToolStripMenuItem.Name = "справкаПоЭкспериментуToolStripMenuItem";
-            this.справкаПоЭкспериментуToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
-            this.справкаПоЭкспериментуToolStripMenuItem.Text = "Справка по эксперименту";
+            this.ExpHelpToolStripMenuItem.Name = "ExpHelpToolStripMenuItem";
+            this.ExpHelpToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
+            this.ExpHelpToolStripMenuItem.Text = "Справка по эксперименту";
+            this.ExpHelpToolStripMenuItem.Click += new System.EventHandler(this.ExpHelpToolStripMenuItem_Click);
             // 
-            // оПрограммеToolStripMenuItem
+            // AboutToolStripMenuItem
             // 
-            this.оПрограммеToolStripMenuItem.Name = "оПрограммеToolStripMenuItem";
-            this.оПрограммеToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
-            this.оПрограммеToolStripMenuItem.Text = "О программе";
+            this.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem";
+            this.AboutToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
+            this.AboutToolStripMenuItem.Text = "О программе";
+            this.AboutToolStripMenuItem.Click += new System.EventHandler(this.AboutToolStripMenuItem_Click);
             // 
             // OGLVP
             // 
@@ -288,6 +290,16 @@
             this.panel1.Size = new System.Drawing.Size(229, 378);
             this.panel1.TabIndex = 4;
             // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Calibri Light", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label6.Location = new System.Drawing.Point(118, 46);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(47, 51);
+            this.label6.TabIndex = 11;
+            this.label6.Text = "ПМ-53\r\nПМ-53\r\nПМ-53";
+            // 
             // label11
             // 
             this.label11.AutoSize = true;
@@ -307,6 +319,16 @@
             this.label10.Size = new System.Drawing.Size(116, 23);
             this.label10.TabIndex = 9;
             this.label10.Text = "Новосибирск";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::LiquidViscosity.Properties.Resources.NSTU_Logo_blue;
+            this.pictureBox1.Location = new System.Drawing.Point(6, 158);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(214, 165);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 8;
+            this.pictureBox1.TabStop = false;
             // 
             // linkLabel1
             // 
@@ -368,26 +390,6 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "Определение вязкости жидкости";
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Image = global::LiquidViscosity.Properties.Resources.NSTU_Logo_blue;
-            this.pictureBox1.Location = new System.Drawing.Point(6, 158);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(214, 165);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 8;
-            this.pictureBox1.TabStop = false;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Calibri Light", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label6.Location = new System.Drawing.Point(118, 46);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(47, 51);
-            this.label6.TabIndex = 11;
-            this.label6.Text = "ПМ-53\r\nПМ-53\r\nПМ-53";
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -434,8 +436,8 @@
         private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem FileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem справкаToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem справкаПоЭкспериментуToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem оПрограммеToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ExpHelpToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem AboutToolStripMenuItem;
         private System.Windows.Forms.Label matName;
         private System.Windows.Forms.Label radiusLabel;
         private Tao.Platform.Windows.SimpleOpenGlControl OGLVP;

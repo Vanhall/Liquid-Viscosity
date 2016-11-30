@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace LiquidViscosity
@@ -274,5 +275,31 @@ namespace LiquidViscosity
             Application.Exit();
         }
 
+        private void ExpHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start( Directory.GetCurrentDirectory() + "/Help/Help.mht");
+            }
+            catch (Exception ex) {
+                MessageBox.Show(ex.Message, "Ошибка",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+        }
+
+        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(Directory.GetCurrentDirectory() + "/Help/About.mht");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+        }
     }
 }
