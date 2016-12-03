@@ -51,11 +51,11 @@
             this.RSlider = new System.Windows.Forms.TrackBar();
             this.ComponentSlider = new System.Windows.Forms.TrackBar();
             this.ElementContainer = new System.Windows.Forms.GroupBox();
+            this.tableSelector = new System.Windows.Forms.RadioButton();
             this.ComponentContainer = new System.Windows.Forms.GroupBox();
             this.ColorContainer = new System.Windows.Forms.GroupBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.SetDefault = new System.Windows.Forms.Button();
-            this.tableSelector = new System.Windows.Forms.RadioButton();
             ((System.ComponentModel.ISupportInitialize)(this.AllSlider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.AlphaSlider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.BSlider)).BeginInit();
@@ -308,6 +308,18 @@
             this.ElementContainer.TabStop = false;
             this.ElementContainer.Text = "Элемент установки";
             // 
+            // tableSelector
+            // 
+            this.tableSelector.AutoSize = true;
+            this.tableSelector.Location = new System.Drawing.Point(217, 18);
+            this.tableSelector.Name = "tableSelector";
+            this.tableSelector.Size = new System.Drawing.Size(49, 17);
+            this.tableSelector.TabIndex = 16;
+            this.tableSelector.TabStop = true;
+            this.tableSelector.Text = "Стол";
+            this.tableSelector.UseVisualStyleBackColor = true;
+            this.tableSelector.CheckedChanged += new System.EventHandler(this.tableSelector_CheckedChanged);
+            // 
             // ComponentContainer
             // 
             this.ComponentContainer.Controls.Add(this.ComponentSlider);
@@ -359,18 +371,7 @@
             this.SetDefault.TabIndex = 17;
             this.SetDefault.Text = "По умолчанию";
             this.SetDefault.UseVisualStyleBackColor = true;
-            // 
-            // tableSelector
-            // 
-            this.tableSelector.AutoSize = true;
-            this.tableSelector.Location = new System.Drawing.Point(217, 18);
-            this.tableSelector.Name = "tableSelector";
-            this.tableSelector.Size = new System.Drawing.Size(49, 17);
-            this.tableSelector.TabIndex = 16;
-            this.tableSelector.TabStop = true;
-            this.tableSelector.Text = "Стол";
-            this.tableSelector.UseVisualStyleBackColor = true;
-            this.tableSelector.CheckedChanged += new System.EventHandler(this.tableSelector_CheckedChanged);
+            this.SetDefault.Click += new System.EventHandler(this.SetDefault_Click);
             // 
             // MatSettings
             // 

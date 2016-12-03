@@ -12,6 +12,7 @@ namespace LiquidViscosity
         public scene scene;
 
         private int ticks = 1;
+        private float TimeFactor = 1.0f;
 
         private float LiquidDensity = 1000.0f;
         private float BallDensity = 11500.0f;
@@ -29,6 +30,10 @@ namespace LiquidViscosity
             matName.Text = "Свинец";
             radiusLabel.Text = (R * 1000).ToString("F1") + " мм";
             Graph.Enabled = false;
+
+            TimeFactorSlider.Value = 3;
+            TimeFactorLabel.Text = "X 1,00";
+            TimerLabel.Text = "0,00 с";
 
             scene = new scene(OGLVP);   // Создаем новую "сцену" см. scene.cs
             liqudChoice.SelectedIndex = 0;
@@ -110,6 +115,13 @@ namespace LiquidViscosity
             }
             scene.render();
         }
+
+        // ползунок скорости эксперимента
+        private void TimeFactorSlider_Scroll(object sender, EventArgs e)
+        {
+            TimeFactor = 4.0f - TimeFactorSlider.Value;
+            TimeFactorLabel.Text = "X " + (1.0f / TimeFactor).ToString("F2");
+        }
         #endregion
 
         private void LockInterface()
@@ -117,6 +129,7 @@ namespace LiquidViscosity
             BallRadius.Enabled = false;
             BallMaterial.Enabled = false;
             liqudChoice.Enabled = false;
+            TimeFactorSlider.Enabled = false;
             start.Enabled = false;
             stop.Enabled = true;
             Graph.Enabled = false;
@@ -127,6 +140,7 @@ namespace LiquidViscosity
             BallRadius.Enabled = true;
             BallMaterial.Enabled = true;
             liqudChoice.Enabled = true;
+            TimeFactorSlider.Enabled = true;
             start.Enabled = true;
             stop.Enabled = false;
         }
@@ -150,7 +164,8 @@ namespace LiquidViscosity
             // то же что при пуске, но наоборот
             UnlockInterface();
             AnimationTimer.Stop();
-            
+            TimerLabel.Text = "0,00 с";
+
             scene.dH = 0.0f;
             ticks = 1;
             scene.render();
@@ -178,6 +193,34 @@ namespace LiquidViscosity
             MatSettings = new MatSettings(this);
             MatSettings.ShowDialog(this);
         }
+
+        private void ExpHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(Directory.GetCurrentDirectory() + "/Help/Help.mht");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+        }
+
+        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(Directory.GetCurrentDirectory() + "/Help/About.mht");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+            }
+        }
         #endregion
 
         #region Обработка мыши
@@ -204,7 +247,7 @@ namespace LiquidViscosity
         private void OGLVP_MouseMove(object sender, MouseEventArgs e)
         {
             // ----------------мышь нажата и движется-----------------
-            camera cam = scene.camera; // чтоб не писать каждый раз scene.camera.бла-бла-бла
+            camera cam = scene.camera;
             if(cam.moving)
             {
                 // Если левая кнопка - вращаем камеру
@@ -238,8 +281,9 @@ namespace LiquidViscosity
         // таймер анимации
         private void AnimationTimer_Tick(object sender, EventArgs e)
         {
-            float time = AnimationTimer.Interval * ticks / 1000.0f;
-            
+            float time = AnimationTimer.Interval * ticks / (1000.0f * TimeFactor);
+            TimerLabel.Text = time.ToString("F2") + " с";
+
             Experiment.T.Add(time);
             Experiment.Vt.Add(Experiment.V(time));
 
@@ -275,24 +319,11 @@ namespace LiquidViscosity
             Application.Exit();
         }
 
-        private void ExpHelpToolStripMenuItem_Click(object sender, EventArgs e)
+        private void emailLink_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             try
             {
-                System.Diagnostics.Process.Start( Directory.GetCurrentDirectory() + "/Help/Help.mht");
-            }
-            catch (Exception ex) {
-                MessageBox.Show(ex.Message, "Ошибка",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning);
-            }
-        }
-
-        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                System.Diagnostics.Process.Start(Directory.GetCurrentDirectory() + "/Help/About.mht");
+                System.Diagnostics.Process.Start("mailto:baranovav@ngs.ru");
             }
             catch (Exception ex)
             {

@@ -66,6 +66,9 @@ namespace LiquidViscosity
             Gl.glBlendFunc(Gl.GL_SRC_ALPHA, Gl.GL_ONE_MINUS_SRC_ALPHA);
             Gl.glEnable(Gl.GL_BLEND);
             Gl.glEnable(Gl.GL_CULL_FACE);
+
+            Gl.glEnable(Gl.GL_LINE_SMOOTH);
+            Gl.glHint(Gl.GL_LINE_SMOOTH_HINT, Gl.GL_NICEST);
         }
 
         #region Освещение
@@ -98,6 +101,31 @@ namespace LiquidViscosity
         }
         #endregion
         
+        // рисование шкалы
+        private void DrawScale()
+        {
+            Gl.glColor3f(0.0f, 0.0f, 0.0f);
+
+            Gl.glLineWidth(1.5f);
+            for (float h = 1.25f; h <= 7.25; h += 1.0f)
+            {
+                Gl.glBegin(Gl.GL_LINE_STRIP);
+                Gl.glVertex3f(0.5f, 0.866f, h);
+                Gl.glVertex3f(0.707f, 0.707f, h);
+                Gl.glVertex3f(0.866f, 0.5f, h);
+                Gl.glEnd();
+            }
+            Gl.glLineWidth(1.0f);
+            for (float h = 0.35f; h <= 7.25; h += 0.1f)
+            {
+                Gl.glBegin(Gl.GL_LINES);
+                Gl.glVertex3f(0.707f, 0.707f, h);
+                Gl.glVertex3f(0.866f, 0.5f, h);
+                Gl.glEnd();
+            }
+
+        }
+
         public void render()
         {
             // очищаем экран и z-буфер
@@ -110,6 +138,7 @@ namespace LiquidViscosity
             // рисуем модельки
             table.render();
             bottom.render();
+            DrawScale();
 
             Gl.glPushMatrix();
             Gl.glTranslatef(0.0f, 0.0f, H0 - dH);

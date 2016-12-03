@@ -27,12 +27,14 @@ namespace LiquidViscosity
             FirstRingPassed = false; SecondRingPassed = false;
         }
 
+        // h(t)
         public float H(float t)
         {
             float H = (d / Lambda) * t + (d / (Lambda * Lambda)) * ((1.0f / (float)Math.Pow(Math.E, Lambda * t)) - 1.0f);
             return H * 10;
         }
 
+        // v(t)
         public float V(float t)
         {
             float V = (d / Lambda) * (1.0f - 1.0f / ((float)Math.Pow(Math.E, Lambda * t)));
