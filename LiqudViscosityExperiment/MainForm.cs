@@ -198,7 +198,7 @@ namespace LiquidViscosity
         {
             try
             {
-                System.Diagnostics.Process.Start(Directory.GetCurrentDirectory() + "/Help/Help.mht");
+                System.Diagnostics.Process.Start(Directory.GetCurrentDirectory() + "/Help/ExpHelp.pdf");
             }
             catch (Exception ex)
             {
@@ -212,7 +212,7 @@ namespace LiquidViscosity
         {
             try
             {
-                System.Diagnostics.Process.Start(Directory.GetCurrentDirectory() + "/Help/About.mht");
+                System.Diagnostics.Process.Start(Directory.GetCurrentDirectory() + "/Help/ProgHelp.pdf");
             }
             catch (Exception ex)
             {

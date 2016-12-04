@@ -1,5 +1,5 @@
 ambient 0 0 0 1
-diffuse 0,68 0,91 0 0,62
+diffuse 0,89 0,88 0,46 0,35
 specular 1 1 1 1
-shininess 0,11 0,11 0,11 1
-emission 0,42 0 0,14 1
+shininess 0,35 0,35 0,35 1
+emission 0,4 0,23 0 1

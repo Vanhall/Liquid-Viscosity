@@ -82,7 +82,7 @@ namespace LiquidViscosity
             Gl.glLightfv(Gl.GL_LIGHT0, Gl.GL_DIFFUSE, light0Dif);
             float[] light0Spec = new float[] { 1.0f, 1.0f, 1.0f, 1.0f };
             Gl.glLightfv(Gl.GL_LIGHT0, Gl.GL_SPECULAR, light0Spec);
-            
+
             Gl.glLightfv(Gl.GL_LIGHT1, Gl.GL_POSITION, light1Pos);
             float[] light1Amb = new float[] { 0.0f, 0.0f, 0.0f, 1.0f };
             Gl.glLightfv(Gl.GL_LIGHT1, Gl.GL_AMBIENT, light1Amb);
