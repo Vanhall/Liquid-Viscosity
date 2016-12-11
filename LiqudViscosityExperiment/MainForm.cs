@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 
@@ -10,9 +11,9 @@ namespace LiquidViscosity
         public Experiment Experiment;
         public Graph Chart;
         public scene scene;
-
-        private int ticks = 1;
+        
         private float TimeFactor = 1.0f;
+        private Stopwatch ExpTimer = new Stopwatch();
 
         private float LiquidDensity = 1000.0f;
         private float BallDensity = 11500.0f;
@@ -34,7 +35,7 @@ namespace LiquidViscosity
             TimeFactorSlider.Value = 3;
             TimeFactorLabel.Text = "X 1,00";
             TimerLabel.Text = "0,00 с";
-
+            
             scene = new scene(OGLVP);   // Создаем новую "сцену" см. scene.cs
             liqudChoice.SelectedIndex = 0;
         }
@@ -155,6 +156,7 @@ namespace LiquidViscosity
             // запускаем таймер по которому будем перерисовывать сцену
             
             AnimationTimer.Start();
+            ExpTimer.Start();
             Experiment = new Experiment(R, BallDensity, LiquidDensity, Viscosity);
         }
 
@@ -164,10 +166,12 @@ namespace LiquidViscosity
             // то же что при пуске, но наоборот
             UnlockInterface();
             AnimationTimer.Stop();
+            ExpTimer.Stop();
+            ExpTimer.Reset();
+
             TimerLabel.Text = "0,00 с";
 
             scene.dH = 0.0f;
-            ticks = 1;
             scene.render();
         }
 
@@ -281,7 +285,7 @@ namespace LiquidViscosity
         // таймер анимации
         private void AnimationTimer_Tick(object sender, EventArgs e)
         {
-            float time = AnimationTimer.Interval * ticks / (1000.0f * TimeFactor);
+            float time = ExpTimer.ElapsedMilliseconds / (1000.0f * TimeFactor);
             TimerLabel.Text = time.ToString("F2") + " с";
 
             Experiment.T.Add(time);
@@ -304,13 +308,13 @@ namespace LiquidViscosity
             if (scene.H0 - 0.1f <= scene.dH + R)
             {
                 AnimationTimer.Stop();
+                ExpTimer.Stop();
+                ExpTimer.Reset();
                 scene.dH = scene.H0 - 0.1f - R * 10;
                 
                 UnlockInterface();
                 Graph.Enabled = true;
-                ticks = 1;
             }
-            else ticks++;
             scene.render();
         }
         
