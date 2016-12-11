@@ -5,15 +5,23 @@ namespace LiquidViscosity
 {
     public class material
     {
+        // Путь к файлу материала
         private string matPath = "";
         private string matName = "";
 
+        // Свойства компонент (R, G, B, A) -----------------------------------
+        // Фоновый свет
         private float[] Ambient = new float[] { 0.0f, 0.0f, 0.0f, 1.0f };
+        // Рассеянный свет
         private float[] Diffuse = new float[] { 0.7f, 0.7f, 0.7f, 1.0f };
+        // Отраженный свет (блик)
         private float[] Specular = new float[] { 0.2f, 0.2f, 0.2f, 1.0f };
+        // "Блескучесть" (матовая/глянцевая поверхность)
         private float[] Shininess = new float[] { 60.0f, 60.0f, 60.0f, 1.0f };
+        // Излучаемый свет
         private float[] Emission = new float[] { 0.0f, 0.0f, 0.0f, 1.0f };
 
+        // Set и Get функции для компонент -----------------------------------
         public void setAttrib(string attrib, float R, float G, float B, float A)
         {
             float[] AttribVector = new float[] { R, G, B, A };
@@ -74,11 +82,13 @@ namespace LiquidViscosity
             return RetVector;
         }
 
+        // Конструктор -------------------------------------------------------
         public material(string path, string name)
         {
             matPath = path;
             matName = name;
 
+            // Читаем данные из файла и задаем компоненты
             if (File.Exists(path + name + ".material"))
             {
                 string[] matAttribs = File.ReadAllLines(path + name + ".material");
@@ -93,6 +103,7 @@ namespace LiquidViscosity
             }
         }
 
+        // Функция сохранения в файл -----------------------------------------
         public void saveMaterial()
         {
             if (File.Exists(matPath + matName + ".material"))
@@ -108,8 +119,10 @@ namespace LiquidViscosity
             outFile.Close();
         }
 
+        // Применение свойств материала --------------------------------------
         public void applyMaterial()
         {
+            // Вызываем соответствующую команду OpenGL для каждого компонента
             Gl.glMaterialfv(Gl.GL_FRONT, Gl.GL_AMBIENT, Ambient);
             Gl.glMaterialfv(Gl.GL_FRONT, Gl.GL_DIFFUSE, Diffuse);
             Gl.glMaterialfv(Gl.GL_FRONT, Gl.GL_SPECULAR, Specular);
