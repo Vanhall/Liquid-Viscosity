@@ -18,7 +18,15 @@ namespace LiquidViscosity
 
         public float H0 = 7.25f;
         public float dH = 0;
-        public float Scale = 1.0f;
+
+        //Масштаб шарика
+        private static float ScaleUp = 1.5f;    // модификатор масштаба
+        private float _Scale = 1.0f * ScaleUp;
+        public float Scale
+        {
+            get { return _Scale; }
+            set { _Scale = value * ScaleUp; }
+        }
 
         // конструктор сцены
         public scene(SimpleOpenGlControl _OGLVP)
@@ -33,31 +41,95 @@ namespace LiquidViscosity
 
             string path = Directory.GetCurrentDirectory() + "/Models/";
 
-            glass = new material(path, "glass");
-            blackPlastic = new material(path, "blackPlastic");
-            wood = new material(path, "wood");
-            lead = new material(path, "grayMetal");
-            steel = new material(path, "steel");
-            brass = new material(path, "brass");
-            water = new material(path, "water");
-            glicerene = new material(path, "glicerene");
-            oil = new material(path, "oil");
+            #region Инициализация материалов
+            float[] DefaultMat = new float[] {
+                0.07f, 0.07f, 0.07f, 1.0f,
+                0.67f, 0.67f, 0.67f, 0.15f,
+                1.0f, 1.0f, 1.0f, 1.0f,
+                0.73f, 0.73f, 0.73f, 1.0f,
+                0.0f, 0.1f, 0.2f, 1.0f };
+            glass = new material("glass", DefaultMat);
 
-            tube = new model(path, "tube");
-            tube_inside = new model(path, "tube_inside");
+            DefaultMat = new float[] {
+                0.08f, 0.08f, 0.08f, 1.0f,
+                0.1f, 0.1f, 0.1f, 1.0f,
+                0.34f, 0.34f, 0.34f, 1.0f,
+                0.54f, 0.54f, 0.54f, 1.0f,
+                0.0f, 0.03f, 0.07f, 1.0f };
+            blackPlastic = new material("blackPlastic", DefaultMat);
+
+            DefaultMat = new float[] {
+                0.22f, 0.17f, 0.07f, 1.0f,
+                0.63f, 0.47f, 0.2f, 1.0f,
+                0.2f, 0.15f, 0.03f, 1.0f,
+                0.24f, 0.24f, 0.24f, 1.0f,
+                0.0f, 0.0f, 0.0f, 1.0f};
+            wood = new material("wood", DefaultMat);
+
+            DefaultMat = new float[] {
+                0.12f, 0.12f, 0.12f, 1.0f,
+                0.41f, 0.41f, 0.41f, 1.0f,
+                0.16f, 0.16f, 0.16f, 1.0f,
+                0.07f, 0.07f, 0.07f, 1.0f,
+                0.0f, 0.0f, 0.0f, 1.0f};
+            lead = new material("lead", DefaultMat);
+
+            DefaultMat = new float[] {
+                0.1f, 0.1f, 0.1f, 1.0f,
+                0.36f, 0.36f, 0.36f, 1.0f,
+                1.0f, 1.0f, 1.0f, 1.0f,
+                0.1f, 0.1f, 0.1f, 1.0f,
+                0.09f, 0.09f, 0.09f, 1.0f};
+            steel = new material("steel", DefaultMat);
+
+            DefaultMat = new float[] {
+                0.0f, 0.0f, 0.0f, 1.0f,
+                0.73f, 0.4f, 0.0f, 1.0f,
+                1.0f, 1.0f, 0.0f, 1.0f,
+                0.17f, 0.17f, 0.17f, 1.0f,
+                0.38f, 0.15f, 0.0f, 1.0f };
+            brass = new material("brass", DefaultMat);
+
+            DefaultMat = new float[] {
+                0.0f, 0.0f, 0.0f, 1.0f,
+                0.07f, 0.28f, 0.49f, 0.13f,
+                1.0f, 1.0f, 1.0f, 1.0f,
+                0.73f, 0.73f, 0.73f, 1.0f,
+                0.0f, 0.59f, 0.76f, 1.0f};
+            water = new material("water", DefaultMat);
+
+            DefaultMat = new float[] {
+                0.12f, 0.25f, 0.05f, 1.0f,
+                0.83f, 0.83f, 0.83f, 0.2f,
+                1.0f, 1.0f, 1.0f, 1.0f,
+                0.15f, 0.15f, 0.15f, 1.0f,
+                0.18f, 0.18f, 0.18f, 1.0f};
+            glicerene = new material("glicerene", DefaultMat);
+
+            DefaultMat = new float[] {
+                0.0f, 0.0f, 0.0f, 1.0f,
+                0.89f, 0.88f, 0.46f, 0.16f,
+                1.0f, 1.0f, 1.0f, 1.0f,
+                0.35f, 0.35f, 0.35f, 1.0f,
+                0.4f, 0.23f, 0.0f, 1.0f};
+            oil = new material("oil", DefaultMat);
+            #endregion
+
+            tube = new model("LiquidViscosity.Models.tube.obj");
+            tube_inside = new model("LiquidViscosity.Models.tube_inside.obj");
             tube.setMaterial(glass);
             tube_inside.setMaterial(glass);
 
-            bottom = new model(path, "base");
+            bottom = new model("LiquidViscosity.Models.base.obj");
             bottom.setMaterial(blackPlastic);
 
-            table = new model(path, "table");
+            table = new model("LiquidViscosity.Models.table.obj");
             table.setMaterial(wood);
 
-            ball = new model(path, "ball");
+            ball = new model("LiquidViscosity.Models.ball.obj");
             ball.setMaterial(lead);
 
-            liquid = new model(path, "liquid");
+            liquid = new model("LiquidViscosity.Models.liquid.obj");
             liquid.setMaterial(water);
 
             Gl.glEnable(Gl.GL_DEPTH_TEST);
@@ -142,7 +214,7 @@ namespace LiquidViscosity
 
             Gl.glPushMatrix();
             Gl.glTranslatef(0.0f, 0.0f, H0 - dH);
-            Gl.glScalef(Scale, Scale, Scale);
+            Gl.glScalef(_Scale, _Scale, _Scale);
             ball.render();
             Gl.glPopMatrix();
 

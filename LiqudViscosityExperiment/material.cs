@@ -6,7 +6,6 @@ namespace LiquidViscosity
     public class material
     {
         // Путь к файлу материала
-        private string matPath = "";
         private string matName = "";
 
         // Свойства компонент (R, G, B, A) -----------------------------------
@@ -20,6 +19,16 @@ namespace LiquidViscosity
         private float[] Shininess = new float[] { 60.0f, 60.0f, 60.0f, 1.0f };
         // Излучаемый свет
         private float[] Emission = new float[] { 0.0f, 0.0f, 0.0f, 1.0f };
+
+        private float[] Default;
+        public void SetDefault()
+        {
+            setAttrib("ambient", Default[0], Default[1], Default[2], Default[3]);
+            setAttrib("diffuse", Default[4], Default[5], Default[6], Default[7]);
+            setAttrib("specular", Default[8], Default[9], Default[10], Default[11]);
+            setAttrib("shininess", Default[12], Default[13], Default[14], Default[15]);
+            setAttrib("emission", Default[16], Default[17], Default[18], Default[19]);
+        }
 
         // Set и Get функции для компонент -----------------------------------
         public void setAttrib(string attrib, float R, float G, float B, float A)
@@ -83,15 +92,15 @@ namespace LiquidViscosity
         }
 
         // Конструктор -------------------------------------------------------
-        public material(string path, string name)
+        public material(string name, float[] new_default)
         {
-            matPath = path;
             matName = name;
+            Default = new_default;
 
             // Читаем данные из файла и задаем компоненты
-            if (File.Exists(path + name + ".material"))
+            if (File.Exists(name + ".material"))
             {
-                string[] matAttribs = File.ReadAllLines(path + name + ".material");
+                string[] matAttribs = File.ReadAllLines(name + ".material");
                 for (int i = 0; i < matAttribs.Length && i < 5; i++)
                 {
                     string[] matParams = matAttribs[i].Split(' ');
@@ -101,14 +110,18 @@ namespace LiquidViscosity
                     setAttrib(matParams[0], RGBA[0], RGBA[1], RGBA[2], RGBA[3]);
                 }
             }
+            else
+            {
+                SetDefault();
+            }
         }
 
         // Функция сохранения в файл -----------------------------------------
         public void saveMaterial()
         {
-            if (File.Exists(matPath + matName + ".material"))
-                File.Delete(matPath + matName + ".material");
-            StreamWriter outFile = new StreamWriter(matPath + matName + ".material");
+            if (File.Exists(matName + ".material"))
+                File.Delete(matName + ".material");
+            StreamWriter outFile = new StreamWriter(matName + ".material");
             outFile.WriteLine("ambient " + string.Join(" ", Ambient));
             outFile.WriteLine("diffuse " + string.Join(" ", Diffuse));
             outFile.WriteLine("specular " + string.Join(" ", Specular));

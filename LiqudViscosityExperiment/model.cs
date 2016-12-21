@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.IO;
 using Tao.OpenGl;
@@ -7,10 +8,6 @@ namespace LiquidViscosity
 {
     public class model
     {
-        // Путь к файлу модели
-        private string modelPath = "";
-        private string modelName = "";
-
         // Указатели на буферы вершин и нормалей
         private int[] VertBuf = new int[1];
         private int[] NormBuf = new int[1];
@@ -24,11 +21,8 @@ namespace LiquidViscosity
         }
 
         // Конструктор
-        public model(string path, string name)
+        public model(string name)
         {
-            modelName = name;
-            modelPath = path;
-            
             #region парсер файлов .obj
             // Списки для записи информации из файла
             List<float> VertexCoords = new List<float>();
@@ -37,13 +31,14 @@ namespace LiquidViscosity
             List<int> NIndexes = new List<int>();
 
             // Читаем файл
-            string[] ObjContent = File.ReadAllLines(path + name + ".obj");
-
-            // "Просеиваем" информацию из полученных строк и
-            // разносим всё по соответсвующим спискам 
-            for (int i = 0; i < ObjContent.Length; i++)
+            var assembly = Assembly.GetExecutingAssembly();
+            Stream stream = assembly.GetManifestResourceStream(name);
+            StreamReader reader = new StreamReader(stream);
+            
+            string content;
+            while((content = reader.ReadLine()) != null)
             {
-                string[] line = ObjContent[i].Split(' ', '/');
+                string[] line = content.Split(' ', '/');
 
                 if (line[0] == "v")      // Вершины
                     for (int j = 1; j < 4; j++)
